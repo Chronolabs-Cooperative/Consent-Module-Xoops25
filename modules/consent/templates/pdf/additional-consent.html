@@ -1,0 +1,26 @@
+<h1>Additional Consent Subscription</h1>
+<p>Date: <em><{$agreement.date}></em><br />
+Batch Referee: #<{$batch.referee}></p>
+<br />
+<br />
+<p>I, <em><{$batch.name}></em> am inviting you the legal gardian of a member of our facilities groups, classes and organisation to place legal consent with our organisation - <{$batch.org}> for your youth member presenting you this letter for adult training and workshops with the facility provider.</p>
+<p>We didn't have your details that is why you need to goto the following link: <font style="font-size: 1.33334em; font-weight: bold;"><a href="<{$batch.url.subscribe}>"><{$batch.url.subscribe}></a></font> and put in your email and phone details for both the guardian and the individual you are permiting to attend the facility workshop.</p>
+<br />
+<{if strlen($batch.event)>0}>
+<h2>Event details</h2>
+<{$batch.event}>
+<{/if}>
+<{if strlen($batch.message.subscribe) > 0}>
+<h2>Message from co-ordinator</h2>
+<{$batch.message.subscribe}>
+<{/if}>
+<br />
+<br />
+<p><em>I thank you for your time if you wish to ask anymore questions our details are below...</em>
+<br />
+<p>Regards,
+<br />
+<{$batch.name}><br />
+<{$batch.org}><br />
+eMail: <{$batch.email}><br />
+Phone: <{$batch.phone}><br /></p>

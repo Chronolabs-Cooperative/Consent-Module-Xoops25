@@ -127,7 +127,7 @@ class consentBatches extends consentXoopsObject
         self::initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 64);
         self::initVar('email', XOBJ_DTYPE_TXTBOX, null, false, 12);
         self::initVar('phone', XOBJ_DTYPE_TXTBOX, null, false, 18);
-        self::initVar('message', XOBJ_DTYPE_OTHER, null, false);
+        self::initVar('message', XOBJ_DTYPE_ARRAY, null, false);
         self::initVar('event', XOBJ_DTYPE_OTHER, null, false);
         self::initVar('cc', XOBJ_DTYPE_ARRAY, array(), false);
         self::initVar('bcc', XOBJ_DTYPE_ARRAY, array(), false);

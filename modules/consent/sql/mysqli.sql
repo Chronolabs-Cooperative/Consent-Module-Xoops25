@@ -54,7 +54,7 @@ CREATE TABLE `consent_agreements` (
   `reminded` int(11) NOT NULL DEFAULT '0',
   `timeout` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `SEARCH` (`approval`,`batch-id`,`gardian-id`,`clientel-id`,`hashkey`,`email-agreement-type`,`created`,`emailed`,`response`,`reminde`,`timeout`) USING BTREE KEY_BLOCK_SIZE=32
+  KEY `SEARCH` (`approval`,`batch-id`,`gardian-id`,`clientel-id`,`hashkey`,`email-agreement-type`,`created`,`emailed`,`response`,`reminded`,`timeout`) USING BTREE KEY_BLOCK_SIZE=32
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `consent_batches` (
@@ -202,7 +202,6 @@ CREATE TABLE `consent_guardians` (
   KEY `SEARCH` (`hashkey`,`name`,`email`,`phone`) USING BTREE KEY_BLOCK_SIZE=32
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE `consent_mailboxs` (
   `id` int(14) unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(196) DEFAULT '',
@@ -214,7 +213,7 @@ CREATE TABLE `consent_mailboxs` (
   `port-smtp` int(8) DEFAULT '993',
   `folders` mediumtext,
   `ssl` enum('Yes','No') DEFAULT 'Yes',
-  `method` enum('IMAP','API') DEFAULT 'POP',
+  `method` enum('IMAP+SMTP','API') DEFAULT 'IMAP+SMTP',
   `attachments` enum('Yes','No') DEFAULT 'Yes',
   `signature` enum('Both','Clientel','Guardian','Unknown') DEFAULT 'Both',
   `collect` enum('Yes','No') DEFAULT 'Yes',
@@ -235,9 +234,8 @@ CREATE TABLE `consent_mailboxs` (
   `errored` int(12) DEFAULT '0',
   `action` int(12) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `SEARCH` (`errored`,`action`,`waiting`,`uids`(11),`agreements-ids`(12),`guardians-ids`(13),`clientels-ids`(13),`last-emails-id`(24))
+  KEY `SEARCH` (`errored`,`action`,`waiting`,`uids`(11),`agreements-id`(12),`guardians-id`(13),`clientels-id`(13),`sent-emails-id`(24))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 CREATE TABLE `consent_mimetypes` (
   `id` mediumint(38) unsigned NOT NULL AUTO_INCREMENT,
@@ -256,7 +254,6 @@ CREATE TABLE `consent_mimetypes` (
   PRIMARY KEY (`id`),
   KEY `SEARCH` (`mimetype`,`accessed`,`created`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 CREATE TABLE `consent_statistics` (
   `id` mediumint(32) NOT NULL AUTO_INCREMENT,

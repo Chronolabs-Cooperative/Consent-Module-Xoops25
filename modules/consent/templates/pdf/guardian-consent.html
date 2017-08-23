@@ -1,0 +1,30 @@
+<h1>Adult Gardian Consent Form</h1>
+<p>Date: <em><{$agreement.date}></em><br />
+Agreement Referee: <strong>#<{$agreement.referee}></strong></p>
+<br />
+<br />
+<p style="float: right; width: 77%; font-style: italic; font-size: 0.78em; margin-right: 39px;"><font style="font-size: 1.8444em; color: rgb(190,0,0);"><strong>Notice:</strong><br /></font>This form is a legal contract that fit into none disclosure we will never place this contract unless needed in legal waiver into the public spectrum or media, it is stored in a private location after photograph with at least a 3 mega-pixel camera or scanned it at a high resolution and either upload to the following URL: <a href="<{$agreement.upload.url.guardian}>"><{$agreement.upload.url.guardian}></a> or reply to the email containing this file making the subject line quoting the following reference text '#<{$agreement.referee}>', only from the email address of: <{$guardian.email}> to the email address of <{$agreement.email}>.</p>
+<br />
+<br />
+<p>I, <em><{$guardian.name}></em> am the legal gardian of <strong><{$clientel.name}></strong> who’s phone number is <{$clientel.phone}> and email address corresponds with <{$clientel.email}>, I understand my legal responsibilities as a gardian and realise this permission Consent Form is for this young individual as mentioned above to participate in adult education and adult related topic pertaining to this service as well as adult training and workshops with the facility provider.</p>
+<br />
+<br />
+<{if strlen($batch.event) > 0}>
+<h2>Event details</h2>
+<{$batch.event}>
+<br />
+<br />
+<{/if}>
+<br />
+<p><em>I hereby declare legal consent</em>
+<br />
+<br />
+<br />
+_____________________________________<br />
+Signed: <{$guardian.name}><br />
+<br /><br />
+___________________________________<br />
+Date<br />
+<br />
+My Email: <{$guardian.email}><br />
+My Phone: <{$guardian.phone}></p>
