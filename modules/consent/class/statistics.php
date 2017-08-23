@@ -18,7 +18,7 @@
  * @link			http://internetfounder.wordpress.com
  */
 
-if (!defined('_MD_consent_MODULE_DIRNAME')) {
+if (!defined('_MD_CONSENT_MODULE_DIRNAME')) {
 	return false;
 }
 

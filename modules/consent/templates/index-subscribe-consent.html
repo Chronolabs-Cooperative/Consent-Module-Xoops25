@@ -1,0 +1,16 @@
+<h1><{$smarty.const._MN_CONSENT_INDEX_H1}></h1>
+<p><{$smarty.const._MN_CONSENT_INDEX_P1}></p>
+<{if $errors}>
+<h2><{$smarty.const._MN_CONSENT_INDEX_H2}></h2>
+<p style="color: rgb(190,0,0); font-size: 1.2345em; font-weight: bold; padding-left: 65px; padding-right: 65px;">
+	<ol>
+	<{foreach item=error from=$errors}>
+		<li><{$error}></li>
+	<{/foreach}>
+	</ol>
+</p>
+<{/if}>
+<p style="color: rgb(0,0,0); font-size: 1.3456em; padding-left: 65px; padding-right: 65px;">
+	<{$form}>
+</p>
+<p><{$smarty.const._MN_CONSENT_INDEX_P2}></p>

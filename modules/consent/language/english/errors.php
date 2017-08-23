@@ -21,4 +21,19 @@
 */
 
 
+// Errors for Single Subscription to Consent
+define('_ERR_CONSENT_FORM_GUARDIAN_NAME_MISSING','Guardian\'s Name is empty and missing');
+define('_ERR_CONSENT_FORM_GUARDIAN_PHONE_MISSING','Guardian\'s Phone is empty and missing');
+define('_ERR_CONSENT_FORM_GUARDIAN_EMAIL_MISSING','Guardian\'s eMail is empty and missing');
+define('_ERR_CONSENT_FORM_GUARDIAN_PHONE_WRONGLENGTH','Guardian\'s Phone must contain at least 10 numbers ~ include country code+area code!');
+define('_ERR_CONSENT_FORM_GUARDIAN_NAME_MALFORMED','Guardian\'s Name must consist of at least two words seperated by a space');
+define('_ERR_CONSENT_FORM_GUARDIAN_EMAIL_MALFORMED','Guardian\'s eMail is malformed and not an email address');
+define('_ERR_CONSENT_FORM_CLIENTEL_NAME_MISSING','Clientel\'s Name is empty and missing');
+define('_ERR_CONSENT_FORM_CLIENTEL_PHONE_MISSING','Clientel\'s Phone is empty and missing');
+define('_ERR_CONSENT_FORM_CLIENTEL_EMAIL_MISSING','Clientel\'s eMail is empty and missing');
+define('_ERR_CONSENT_FORM_CLIENTEL_PHONE_WRONGLENGTH','Clientel\'s Phone must contain at least 10 numbers ~ include country code+area code!');
+define('_ERR_CONSENT_FORM_CLIENTEL_NAME_MALFORMED','Clientel\'s Name must consist of at least two words seperated by a space');
+define('_ERR_CONSENT_FORM_CLIENTEL_EMAIL_MALFORMED','Clientel\'s eMail is malformed and not an email address');
+define('_ERR_CONSENT_FORM_AGREEMENT_EXISTINGINQUEUE','Guardian+Clientel is already exists in a current consent request agreements!');
+
 ?>

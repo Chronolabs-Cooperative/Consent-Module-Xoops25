@@ -39,8 +39,6 @@
 			if (empty($consentConfigsList))
 			{
 				$consentConfigsList = xoops_gethandler('config')->getConfigList($consentModule->getVar('mid'));
-				if (!defined('_MD_CONSENT_DEFAULT_TWITTER'))
-					define('_MD_CONSENT_DEFAULT_TWITTER',$consentConfigsList['username']);
 			}
 			if (empty($consentConfigs))
 			{

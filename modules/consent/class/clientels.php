@@ -27,11 +27,11 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
 require_once (__DIR__ . DIRECTORY_SEPARATOR . 'xcp' . DIRECTORY_SEPARATOR . 'class' . DIRECTORY_SEPARATOR . 'xcp.class.php');
 
 /**
- * Database Table for Guardians in Legal Consent Module
+ * Database Table for Clientels in Legal Consent Module
  *
  * For Table:-
  * <code>
- * CREATE TABLE `consent_guardians` (
+ * CREATE TABLE `consent_clientels` (
  *   `id` int(20) NOT NULL AUTO_INCREMENT,
  *   `uid` int(13) NOT NULL DEFAULT '0',
  *   `hashkey` varchar(12) NOT NULL DEFAULT '',
@@ -54,10 +54,10 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'xcp' . DIRECTORY_SEPARATOR . 'cla
  * @author Simon Roberts (wishcraft@users.sourceforge.net)
  * @copyright copyright (c) 2015 labs.coop
  */
-class consentGuardians extends consentXoopsObject
+class consentClientels extends consentXoopsObject
 {
 
-	var $handler = 'consentGuardiansHandler';
+	var $handler = 'consentClientelsHandler';
 	
     function __construct($id = null)
     {   	
@@ -90,16 +90,17 @@ class consentGuardians extends consentXoopsObject
 
 
 /**
- * Handler Class for Guardians
+ * Handler Class for Clientels
  * @author Simon Roberts (wishcraft@users.sourceforge.net)
  * @copyright copyright (c) 2015 labs.coop
  */
-class consentGuardiansHandler extends consentXoopsObjectHandler
+class consentClientelsHandler extends consentXoopsObjectHandler
 {
-	/**
-	 * 
-	 * @var integer
-	 */
+	
+    /**
+     *
+     * @var integer
+     */
     var $created = 0;
     
     /**
@@ -113,14 +114,14 @@ class consentGuardiansHandler extends consentXoopsObjectHandler
 	 * 
 	 * @var string
 	 */
-	var $tbl = 'consent_guardians';
+	var $tbl = 'consent_clientels';
 	
 	/**
 	 * Child Object Handling Class
 	 *
 	 * @var string
 	 */
-	var $child = 'consentGuardians';
+	var $child = 'consentClientels';
 	
 	/**
 	 * Child Object Identity Key
@@ -144,13 +145,13 @@ class consentGuardiansHandler extends consentXoopsObjectHandler
     }
     
     /**
-     * Inserts a New Gardian
-     * 
-     * @param consentGuardians $object
+     * Inserts a New Clientel
+     *
+     * @param consentClientels $object
      * @param string $force
      * @return unknown
      */
-    public static function insert(consentGuardians $object, $force = true)
+    public static function insert(consentClientels $object, $force = true)
     {
         if ($object->isNew())
         {
@@ -170,7 +171,7 @@ class consentGuardiansHandler extends consentXoopsObjectHandler
             $this->created++;
             $object->setVar('created', time());
             $crc = new xcp($data = $this->created.$object->getVar('uid').$object->getVar('created').$object->getVar('name').$object->getVar('email').$object->getVar('phone'), mt_rand(0,255), mt_rand(4,10));
-            $object->setVar('hashkey', $crc->crc);  
+            $object->setVar('hashkey', $crc->crc);
         }
         return parent::insert($object, $force);
     }
