@@ -32,6 +32,7 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  * <code>
  * CREATE TABLE `consent_agreements` (
  *   `id` int(32) NOT NULL AUTO_INCREMENT,
+ *   `mailbox-id` int(14) NOT NULL DEFAULT '0',
  *   `uid` int(13) NOT NULL DEFAULT '0',
  *   `approval` enum('Waiting','Approved','Unapproved') NOT NULL DEFAULT 'Waiting',
  *   `batch-id` int(20) NOT NULL DEFAULT '0',
@@ -40,25 +41,26 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `hashkey` varchar(12) NOT NULL DEFAULT '',
  *   `referee` varchar(18) NOT NULL DEFAULT '',
  *   `callback-url` varchar(255) NOT NULL DEFAULT '',
- *   `svn-path` varchar(255) NOT NULL DEFAULT '',
+ *   `svn-paths` longtext,
  *   `gardian-filename-pdf` varchar(128) NOT NULL DEFAULT '',
  *   `clientel-filename-pdf` varchar(128) NOT NULL DEFAULT '',
  *   `gardian-response-file` varchar(128) NOT NULL DEFAULT '',
  *   `clientel-response-file` varchar(128) NOT NULL DEFAULT '',
  *   `response-waiting` enum('Gardian','Clientel','Both') NOT NULL DEFAULT 'Both',
  *   `response-sourced` enum('Gardian','Clientel','Both') NOT NULL DEFAULT 'Both',
- *   `response-comment` mediumtext,
- *   `response-network` mediumtext,
+ *   `response-comment` longtext,
+ *   `response-network` longtext,
  *   `response-notified` int(11) NOT NULL DEFAULT '0',
  *   `response-weight` int(11) NOT NULL DEFAULT '0',
  *   `response-gardian-weight` int(11) NOT NULL DEFAULT '0',
  *   `response-clientel-weight` int(11) NOT NULL DEFAULT '0',
- *   `email-ids` mediumtext,
+ *   `email-ids` longtext,
  *   `email-agreement-type` enum('None','Gardian','Clientel','Both') NOT NULL DEFAULT 'Both',
  *   `email-recovery-type` enum('None','Gardian','Clientel','Batch') NOT NULL DEFAULT 'None',
  *   `email-recovery-guardian-sent` int(11) NOT NULL DEFAULT '0',
  *   `email-recovery-clientel-sent` int(11) NOT NULL DEFAULT '0',
  *   `email-from` varchar(64) NOT NULL DEFAULT '',
+ *   `email-email-from` varchar(196) NOT NULL DEFAULT '',
  *   `email-sent` int(11) NOT NULL DEFAULT '0',
  *   `email-views` int(11) NOT NULL DEFAULT '0',
  *   `email-viewed` int(11) NOT NULL DEFAULT '0',
@@ -81,7 +83,7 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `emailed` int(11) NOT NULL DEFAULT '0',
  *   `response` int(11) NOT NULL DEFAULT '0',
  *   `recovery` int(11) NOT NULL DEFAULT '0',
- *   `reminde` int(11) NOT NULL DEFAULT '0',
+ *   `reminded` int(11) NOT NULL DEFAULT '0',
  *   `timeout` int(11) NOT NULL DEFAULT '0',
  *   PRIMARY KEY (`id`),
  *   KEY `SEARCH` (`approval`,`batch-id`,`gardian-id`,`clientel-id`,`hashkey`,`email-agreement-type`,`created`,`emailed`,`response`,`reminde`,`timeout`) USING BTREE KEY_BLOCK_SIZE=32
@@ -99,8 +101,59 @@ class consentAgreements extends consentXoopsObject
     {   	
     	
         self::initVar('id', XOBJ_DTYPE_INT, null, false);
-        self::initVar('fontid', XOBJ_DTYPE_INT, null, false);
-        self::initVar('value', XOBJ_DTYPE_INT, null, false);
+        self::initVar('mailbox-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('uid', XOBJ_DTYPE_INT, null, false);
+        self::initVar('approval', XOBJ_DTYPE_ENUM, 'Waiting', false, false, false, consentEnumeratorValues(basename(__FILE__), 'approval'));
+        self::initVar('batch-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardian-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('hashkey', XOBJ_DTYPE_TXTBOX, null, false, 12);
+        self::initVar('referee', XOBJ_DTYPE_TXTBOX, null, false, 18);
+        self::initVar('callback-url', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        self::initVar('svn-paths', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('gardian-filename-pdf', XOBJ_DTYPE_TXTBOX, null, false, 128);
+        self::initVar('clientel-filename-pdf', XOBJ_DTYPE_TXTBOX, null, false, 128);
+        self::initVar('gardian-response-file', XOBJ_DTYPE_TXTBOX, null, false, 128);
+        self::initVar('clientel-response-file', XOBJ_DTYPE_TXTBOX, null, false, 128);
+        self::initVar('response-waiting', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'response-waiting'));
+        self::initVar('response-sourced', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'response-sourced'));
+        self::initVar('response-comment', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('response-network', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('response-notified', XOBJ_DTYPE_INT, null, false);
+        self::initVar('response-weight', XOBJ_DTYPE_INT, null, false);
+        self::initVar('response-gardian-weight', XOBJ_DTYPE_INT, null, false);
+        self::initVar('response-clientel-weight', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-ids', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('email-agreement-type', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'email-agreement-type'));
+        self::initVar('email-recovery-type', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'email-recovery-type'));
+        self::initVar('email-recovery-guardian-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-clientel-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-from', XOBJ_DTYPE_TXTBOX, null, false, 64);
+        self::initVar('email-email-from', XOBJ_DTYPE_INT, null, false, 196);
+        self::initVar('email-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-gardian-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-gardian-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-gardian-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-clientel-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-clientel-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-clientel-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-remiders-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-remiders-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-remiders-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-progress-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-progress-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-progress-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('emailed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('reponse', XOBJ_DTYPE_INT, null, false);
+        self::initVar('recovery', XOBJ_DTYPE_INT, null, false);
+        self::initVar('reminded', XOBJ_DTYPE_INT, null, false);
+        self::initVar('timeout', XOBJ_DTYPE_INT, null, false);
         
         if (!empty($id) && !is_null($id))
         {

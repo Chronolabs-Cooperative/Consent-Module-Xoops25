@@ -43,7 +43,7 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `undelivered` int(11) NOT NULL DEFAULT '0',
  *   `recovered` int(11) NOT NULL DEFAULT '0',
  *   `recovery-id` int(20) NOT NULL DEFAULT '0',
- *   `agreement-ids` mediumtext,
+ *   `agreement-ids` longtext,
  *   `email-views` int(11) NOT NULL DEFAULT '0',
  *   `email-viewed` int(11) NOT NULL DEFAULT '0',
  *   PRIMARY KEY (`id`),
@@ -62,8 +62,20 @@ class consentGuardians extends consentXoopsObject
     {   	
     	
         self::initVar('id', XOBJ_DTYPE_INT, null, false);
-        self::initVar('fontid', XOBJ_DTYPE_INT, null, false);
-        self::initVar('value', XOBJ_DTYPE_INT, null, false);
+        self::initVar('uid', XOBJ_DTYPE_INT, null, false);
+        self::initVar('hashkey', XOBJ_DTYPE_TXTBOX, null, false, 12);
+        self::initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 64);
+        self::initVar('email', XOBJ_DTYPE_TXTBOX, null, false, 196);
+        self::initVar('phone', XOBJ_DTYPE_TXTBOX, null, false, 20);
+        self::initVar('created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('emailed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('response', XOBJ_DTYPE_INT, null, false);
+        self::initVar('undelivered', XOBJ_DTYPE_INT, null, false);
+        self::initVar('recovered', XOBJ_DTYPE_INT, null, false);
+        self::initVar('recovery-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreement-ids', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('email-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-viewed', XOBJ_DTYPE_INT, null, false);
         
         if (!empty($id) && !is_null($id))
         {

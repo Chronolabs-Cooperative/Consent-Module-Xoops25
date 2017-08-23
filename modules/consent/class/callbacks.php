@@ -35,8 +35,8 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `uri` varchar(250) NOT NULL DEFAULT '',
  *   `timeout` int(4) NOT NULL DEFAULT '0',
  *   `connection` int(4) NOT NULL DEFAULT '0',
- *   `data` mediumtext NOT NULL,
- *   `queries` mediumtext NOT NULL,
+ *   `data` longtext,
+ *   `queries` longtext,
  *   `fails` int(3) NOT NULL DEFAULT '0',
  *   PRIMARY KEY (`when`)
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -52,9 +52,13 @@ class consentCallbacks extends consentXoopsObject
     function __construct($id = null)
     {   	
     	
-        self::initVar('id', XOBJ_DTYPE_INT, null, false);
-        self::initVar('fontid', XOBJ_DTYPE_INT, null, false);
-        self::initVar('value', XOBJ_DTYPE_INT, null, false);
+        self::initVar('when', XOBJ_DTYPE_INT, null, false);
+        self::initVar('uri', XOBJ_DTYPE_TXTBOX, null, false, 250);
+        self::initVar('timeout', XOBJ_DTYPE_INT, null, false);
+        self::initVar('connection', XOBJ_DTYPE_INT, null, false);
+        self::initVar('data', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('queries', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('fails', XOBJ_DTYPE_INT, null, false);
         
         if (!empty($id) && !is_null($id))
         {

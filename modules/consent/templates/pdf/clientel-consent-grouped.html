@@ -1,12 +1,12 @@
 <h1>Young Client Consent Form</h1>
-<p>Date: {DATE}<br />
-Agreement Ref: {REFEREE}</p>
+<p>Date: <{agreement.date}><br />
+Agreement Ref: <{agreement.referee}></p>
 <br />
 <br />
-<p style="float: right; width: 77%; font-style: italic; font-size: 0.78em; margin-right: 39px;"><strong>Notice:</strong><br />This form is a legal contract that fit into none disclosure we will never place this contract unless needed in legal waiver into the public spectrum or media, it is stored in a private location after you photograph with at least a 3 mega-pixel camera or scanned it at a high resolution and <strong>ONLY!</strong> uploading to the following URL: <a href="{CONSENT_UPLOAD}">{CONSENT_UPLOAD}</a> ~ <em>do not return at any condition by reply to the email containing this file!</em></p>
+<p style="float: right; width: 77%; font-style: italic; font-size: 0.78em; margin-right: 39px;"><strong>Notice:</strong><br />This form is a legal contract that fit into none disclosure we will never place this contract unless needed in legal waiver into the public spectrum or media, it is stored in a private location after you photograph with at least a 3 mega-pixel camera or scanned it at a high resolution and <strong>ONLY!</strong> uploading to the following URL: <a href="<{agreement.uploadurl.clientel}>"><{agreement.upload.url.both}></a> ~ <em>do not return at any condition by reply to the email containing this file!</em></p>
 <br />
 <br />
-<p>I, {CLIENTEL_NAME} am the participant adult activities that require guardian consent and have the consent of my guardian {GUARDIAN_NAME} who’s {REFERER_TYPE} details are {REFERER_VALUE}. I understand my legal responsibilities as a participant and realise this permission consent Form is for myself potentially a young adult as mentioned above to participant in adult education or activities sometime with classes, training and workshops with the facility provider.</p>
+<p>I, <strong><em><{clientel.name}></em></strong> am the participant adult activities that require guardian consent and have the consent of my guardian <strong><em><{guardian.name}></em></strong> who’s phone is <strong><em><{guardian.phone}></em></strong> or email is <strong><em><{guardian.email}></em></strong> details are {REFERER_VALUE}. I understand my legal responsibilities as a participant and realise this permission consent Form is for myself potentially a young adult as mentioned above to participant in adult education or activities sometime with classes, training and workshops with the facility provider.</p>
 <br />
 <br />
 <br />
@@ -15,10 +15,10 @@ Agreement Ref: {REFEREE}</p>
 <br />
 <br />
 _____________________________________<br />
-Signed: {CLIENTEL_NAME}<br />
+Signed: <strong><em><{clientel.name}></em></strong><br />
 <br /><br />
 ___________________________________<br />
 Date<br />
 <br />
-My Email: {CLIENTEL_EMAIL}<br />
-My Phone: {CLIENTEL_PHONE}</p>
+My Email: <strong><em><{clientel.email}></em></strong><br />
+My Phone: <strong><em><{clientel.phone}></em></strong></p>

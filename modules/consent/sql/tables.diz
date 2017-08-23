@@ -4,4 +4,6 @@ consent_callbacks
 consent_clientel
 consent_guardians
 consent_emails
+consent_mailboxs
+consent_mimetypes
 consent_statistics

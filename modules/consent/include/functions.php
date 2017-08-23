@@ -18,7 +18,7 @@
  * @link			http://internetfounder.wordpress.com
  */
 	
-if (!function_exists("getEnumeratorValues")) {
+if (!function_exists("consentEnumeratorValues")) {
 	/**
 	 * Loads a field enumerator values
 	 *
@@ -26,7 +26,7 @@ if (!function_exists("getEnumeratorValues")) {
 	 * @param string $variable
 	 * @return array():
 	 */
-	function getEnumeratorValues($filename = '', $variable = '')
+	function consentEnumeratorValues($filename = '', $variable = '')
 	{
 		$variable = str_replace(array('-', ' '), "_", $variable);
 		static $ret = array();

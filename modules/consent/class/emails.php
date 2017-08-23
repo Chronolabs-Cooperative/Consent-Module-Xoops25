@@ -60,8 +60,18 @@ class consentEmails extends consentXoopsObject
     {   	
     	
         self::initVar('id', XOBJ_DTYPE_INT, null, false);
-        self::initVar('fontid', XOBJ_DTYPE_INT, null, false);
-        self::initVar('value', XOBJ_DTYPE_INT, null, false);
+        self::initVar('approval', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'approval'));
+        self::initVar('email-type', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'email-type'));
+        self::initVar('email-target', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'email-target'));
+        self::initVar('agreement-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('batch-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardian-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email', XOBJ_DTYPE_TXTBOX, null, false, 196);
+        self::initVar('referee', XOBJ_DTYPE_TXTBOX, null, false, 18);
+        self::initVar('created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('timeout', XOBJ_DTYPE_INT, null, false);
+        self::initVar('checked', XOBJ_DTYPE_INT, null, false);
         
         if (!empty($id) && !is_null($id))
         {

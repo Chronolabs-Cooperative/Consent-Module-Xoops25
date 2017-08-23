@@ -32,6 +32,8 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  * <code>
  * CREATE TABLE `consent_batches` (
  *   `id` int(20) NOT NULL AUTO_INCREMENT,
+ *   `type` enum('Collect','CSV','None') NOT NULL DEFAULT 'None',
+ *   `mailbox-id` int(13) NOT NULL DEFAULT '0',
  *   `uid` int(13) NOT NULL DEFAULT '0',
  *   `hashkey` varchar(12) NOT NULL DEFAULT '',
  *   `referee` varchar(18) NOT NULL DEFAULT '',
@@ -73,24 +75,24 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `email-recovery-sent` int(11) NOT NULL DEFAULT '0',
  *   `email-recovery-views` int(11) NOT NULL DEFAULT '0',
  *   `email-recovery-viewed` int(11) NOT NULL DEFAULT '0',
- *   `batches` int(11) NOT NULL DEFAULT '0',
+ *   `agreements-created` int(11) NOT NULL DEFAULT '0',
  *   `gardians-created` int(11) NOT NULL DEFAULT '0',
  *   `clientel-created` int(11) NOT NULL DEFAULT '0',
  *   `gardians-existed` int(11) NOT NULL DEFAULT '0',
  *   `clientel-existed` int(11) NOT NULL DEFAULT '0',
- *   `batches-failed` int(11) NOT NULL DEFAULT '0',
+ *   `agreements-failed` int(11) NOT NULL DEFAULT '0',
  *   `gardians-failed` int(11) NOT NULL DEFAULT '0',
  *   `clientel-failed` int(11) NOT NULL DEFAULT '0',
- *   `batches-approved` int(11) NOT NULL DEFAULT '0',
+ *   `agreements-approved` int(11) NOT NULL DEFAULT '0',
  *   `gardians-approved` int(11) NOT NULL DEFAULT '0',
  *   `clientel-approved` int(11) NOT NULL DEFAULT '0',
- *   `batches-unapproved` int(11) NOT NULL DEFAULT '0',
+ *   `agreements-unapproved` int(11) NOT NULL DEFAULT '0',
  *   `gardians-unapproved` int(11) NOT NULL DEFAULT '0',
  *   `clientel-unapproved` int(11) NOT NULL DEFAULT '0',
- *   `batches-recovery` int(11) NOT NULL DEFAULT '0',
+ *   `agreements-recovery` int(11) NOT NULL DEFAULT '0',
  *   `gardians-recovery` int(11) NOT NULL DEFAULT '0',
  *   `clientel-recovery` int(11) NOT NULL DEFAULT '0',
- *   `batches-recovered` int(11) NOT NULL DEFAULT '0',
+ *   `agreements-recovered` int(11) NOT NULL DEFAULT '0',
  *   `gardians-recovered` int(11) NOT NULL DEFAULT '0',
  *   `clientel-recovered` int(11) NOT NULL DEFAULT '0',
  *   `approvals` int(11) NOT NULL DEFAULT '0',
@@ -99,6 +101,7 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `created` int(11) NOT NULL DEFAULT '0',
  *   `timeout` int(11) NOT NULL DEFAULT '0',
  *   `reported` int(11) NOT NULL DEFAULT '0',
+ *   `reporting` int(11) NOT NULL DEFAULT '0',
  *   PRIMARY KEY (`id`),
  *   KEY `SEARCH` (`hashkey`,`email`,`timeout`) USING BTREE KEY_BLOCK_SIZE=32
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -115,8 +118,76 @@ class consentBatches extends consentXoopsObject
     {   	
     	
         self::initVar('id', XOBJ_DTYPE_INT, null, false);
-        self::initVar('fontid', XOBJ_DTYPE_INT, null, false);
-        self::initVar('value', XOBJ_DTYPE_INT, null, false);
+        self::initVar('type', XOBJ_DTYPE_ENUM, 'Waiting', false, false, false, consentEnumeratorValues(basename(__FILE__), 'type'));
+        self::initVar('mailbox-id', XOBJ_DTYPE_INT, null, false);
+        self::initVar('uid', XOBJ_DTYPE_INT, null, false);
+        self::initVar('hashkey', XOBJ_DTYPE_TXTBOX, null, false, 12);
+        self::initVar('referee', XOBJ_DTYPE_TXTBOX, null, false, 18);
+        self::initVar('org', XOBJ_DTYPE_TXTBOX, null, false, 64);
+        self::initVar('name', XOBJ_DTYPE_TXTBOX, null, false, 64);
+        self::initVar('email', XOBJ_DTYPE_TXTBOX, null, false, 12);
+        self::initVar('phone', XOBJ_DTYPE_TXTBOX, null, false, 18);
+        self::initVar('message', XOBJ_DTYPE_OTHER, null, false);
+        self::initVar('event', XOBJ_DTYPE_OTHER, null, false);
+        self::initVar('cc', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('bcc', XOBJ_DTYPE_ARRAY, array(), false);
+        self::initVar('callback-url', XOBJ_DTYPE_TXTBOX, null, false, 255);
+        self::initVar('email-agreement-type', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'email-agreement-type'));
+        self::initVar('csv-lines', XOBJ_DTYPE_INT, null, false);
+        self::initVar('csv-bytes', XOBJ_DTYPE_INT, null, false);
+        self::initVar('csv-md5', XOBJ_DTYPE_TXTBOX, null, false, 32);
+        self::initVar('csv-field', XOBJ_DTYPE_TXTBOX, ",", false, 8);
+        self::initVar('csv-terminated', XOBJ_DTYPE_TXTBOX, "\n", false, 8);
+        self::initVar('csv-string', XOBJ_DTYPE_TXTBOX, '"', false, 8);
+        self::initVar('response-weight', XOBJ_DTYPE_INT, null, false);
+        self::initVar('response-gardian-weight', XOBJ_DTYPE_INT, null, false);
+        self::initVar('response-clientel-weight', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-from', XOBJ_DTYPE_TXTBOX, null, false, 64);
+        self::initVar('email-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-gardian-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-gardian-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-gardian-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-clientel-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-clientel-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-clientel-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-remiders-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-remiders-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-remiders-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-progress-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-progress-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-progress-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-sent', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-views', XOBJ_DTYPE_INT, null, false);
+        self::initVar('email-recovery-viewed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreements-created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-existed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-existed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreements-failed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-failed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-failed', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreements-approved', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-approved', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-approved', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreements-unapproved', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-unapproved', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-unapproved', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreements-recovery', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-recovery', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-recovery', XOBJ_DTYPE_INT, null, false);
+        self::initVar('agreements-recovered', XOBJ_DTYPE_INT, null, false);
+        self::initVar('gardians-recovered', XOBJ_DTYPE_INT, null, false);
+        self::initVar('clientel-recovered', XOBJ_DTYPE_INT, null, false);
+        self::initVar('approvals', XOBJ_DTYPE_INT, null, false);
+        self::initVar('reminders', XOBJ_DTYPE_INT, null, false);
+        self::initVar('recovery', XOBJ_DTYPE_INT, null, false);
+        self::initVar('created', XOBJ_DTYPE_INT, null, false);
+        self::initVar('timeout', XOBJ_DTYPE_INT, null, false);
+        self::initVar('reported', XOBJ_DTYPE_INT, null, false);
+        self::initVar('reporting', XOBJ_DTYPE_INT, null, false);
         
         if (!empty($id) && !is_null($id))
         {

@@ -41,11 +41,21 @@ require_once (__DIR__ . DIRECTORY_SEPARATOR . 'objects.php');
  *   `hour` int(2) NOT NULL DEFAULT '0',
  *   `minute` int(2) NOT NULL DEFAULT '0',
  *   `seconds` int(2) NOT NULL DEFAULT '0',
- *   `quarter` enum('0-15','15-30','30-45','45-60') NOT NULL DEFAULT '0-15',
+ *   `segment-month` enum('0-3','3-6','6-9','9-12') NOT NULL DEFAULT '0-3',
+ *   `segment-hour` enum('0-3','3-6','6-9','9-12','12-15','15-18','18-21','21-24') NOT NULL DEFAULT '0-3',
+ *   `segment-minute` enum('0-15','15-30','30-45','45-60') NOT NULL DEFAULT '0-15',
  *   `day-name` enum('Sun','Sat','Mon','Tue','Wed','Thu','Fri') NOT NULL DEFAULT 'Sun',
  *   `stat` float(22,9) NOT NULL DEFAULT '0.000000000',
  *   `adverage` float(22,9) NOT NULL DEFAULT '0.000000000',
  *   `stdev` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `adverage-year` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `stdev-year` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `adverage-month` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `stdev-month` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `adverage-day` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `stdev-day` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `adverage-week` float(22,9) NOT NULL DEFAULT '0.000000000',
+ *   `stdev-week` float(22,9) NOT NULL DEFAULT '0.000000000',
  *   PRIMARY KEY (`id`),
  *   KEY `SEARCH` (`key`,`year`,`month`,`day`,`week`,`hour`,`minute`,`quarter`,`day-name`) USING BTREE KEY_BLOCK_SIZE=32
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -62,8 +72,30 @@ class consentStatistics extends consentXoopsObject
     {   	
     	
         self::initVar('id', XOBJ_DTYPE_INT, null, false);
-        self::initVar('fontid', XOBJ_DTYPE_INT, null, false);
-        self::initVar('value', XOBJ_DTYPE_INT, null, false);
+        self::initVar('key', XOBJ_DTYPE_TXTBOX, null, false, 64);
+        self::initVar('when', XOBJ_DTYPE_INT, null, false);
+        self::initVar('year', XOBJ_DTYPE_INT, null, false);
+        self::initVar('month', XOBJ_DTYPE_INT, null, false);
+        self::initVar('day', XOBJ_DTYPE_INT, null, false);
+        self::initVar('week', XOBJ_DTYPE_INT, null, false);
+        self::initVar('hour', XOBJ_DTYPE_INT, null, false);
+        self::initVar('minute', XOBJ_DTYPE_INT, null, false);
+        self::initVar('seconds', XOBJ_DTYPE_INT, null, false);
+        self::initVar('segment-month', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'approval'));
+        self::initVar('segment-hour', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'approval'));
+        self::initVar('segment-minute', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'approval'));
+        self::initVar('day-name', XOBJ_DTYPE_ENUM, 'Both', false, false, false, consentEnumeratorValues(basename(__FILE__), 'email-type'));
+        self::initVar('stat', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('adverage', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('stdev', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('adverage-year', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('stdev-year', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('adverage-month', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('stdev-month', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('adverage-day', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('stdev-day', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('adverage-week', XOBJ_DTYPE_FLOAT, null, false);
+        self::initVar('stdev-week', XOBJ_DTYPE_FLOAT, null, false);
         
         if (!empty($id) && !is_null($id))
         {
